@@ -1,12 +1,9 @@
 package com.example.BookMovies.DTO;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
-public class RegisterUserDTO {
+public class LoginUserDTO {
     private String username;
-    private String email;
     private String password;
 }
