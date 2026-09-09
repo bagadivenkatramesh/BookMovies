@@ -1,5 +1,7 @@
 package com.example.BookMovies.Controller;
 
+import com.example.BookMovies.DTO.LoginResponseDTO;
+import com.example.BookMovies.DTO.LoginUserDTO;
 import com.example.BookMovies.DTO.RegisterUserDTO;
 import com.example.BookMovies.Entity.User;
 import com.example.BookMovies.Service.AuthenticationService;
@@ -21,5 +23,10 @@ public class AuthController {
     @PostMapping("/register_normal_user")
     public ResponseEntity<User> registerNormalUser(@RequestBody RegisterUserDTO registerUserDto){
         return ResponseEntity.ok(authenticationService.registerNormalUser(registerUserDto));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginUserDTO loginUserDto){
+        return ResponseEntity.ok(authenticationService.login(loginUserDto));
     }
 }
