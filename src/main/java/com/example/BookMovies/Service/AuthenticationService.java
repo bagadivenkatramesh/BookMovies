@@ -4,8 +4,12 @@ import com.example.BookMovies.DTO.LoginResponseDTO;
 import com.example.BookMovies.DTO.LoginUserDTO;
 import com.example.BookMovies.DTO.RegisterUserDTO;
 import com.example.BookMovies.Entity.User;
+import com.example.BookMovies.JWT.JwtService;
 import com.example.BookMovies.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -16,6 +20,12 @@ public class AuthenticationService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtService jwtService;
 
     public User registerNormalUser(RegisterUserDTO registerUserDto){
         if(userRepository.findByUsername(registerUserDto.getUsername()).isPresent()){
@@ -46,6 +56,15 @@ public class AuthenticationService {
     }
 
     public LoginResponseDTO login(LoginUserDTO loginUserDto){
-
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginUserDto.getUsername(),
+                        loginUserDto.getPassword()
+                )
+        );
+        User user = (User) authentication.getPrincipal();
+        String token = jwtService.generateToken(user);
+        return LoginResponseDTO.builder().
+                jwtToken(token).build();
     }
 }
