@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -27,6 +28,9 @@ public class AuthenticationService {
     @Autowired
     private JwtService jwtService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public User registerNormalUser(RegisterUserDTO registerUserDto){
         if(userRepository.findByUsername(registerUserDto.getUsername()).isPresent()){
             throw new RuntimeException("User with the username "+registerUserDto.getUsername()+" already exists");
@@ -36,7 +40,7 @@ public class AuthenticationService {
         roles.add("ROLE_USER");
         user.setUsername(registerUserDto.getUsername());
         user.setEmail(registerUserDto.getEmail());
-        user.setPassword(registerUserDto.getPassword());
+        user.setPassword(passwordEncoder.encode(registerUserDto.getPassword()));
         user.setRoles(roles);
         return userRepository.save(user);
     }
@@ -50,7 +54,7 @@ public class AuthenticationService {
         roles.add("ROLE_USER"); roles.add("ROLE_ADMIN");
         user.setUsername(registerUserDto.getUsername());
         user.setEmail(registerUserDto.getEmail());
-        user.setPassword(registerUserDto.getPassword());
+        user.setPassword(passwordEncoder.encode(registerUserDto.getPassword()));
         user.setRoles(roles);
         return userRepository.save(user);
     }
