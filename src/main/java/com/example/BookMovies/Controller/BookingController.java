@@ -29,9 +29,13 @@ public class BookingController {
         );
     }
 
-    @GetMapping("/get_bookings_for_user/{user_id}")
-    public ResponseEntity<List<Booking>> getBookingsForUser(@PathVariable Long user_id){
-        return ResponseEntity.ok(bookingService.getBookingsForUser(user_id));
+    @GetMapping("/my_bookings")
+    public ResponseEntity<List<Booking>> getMyBookings(
+            @AuthenticationPrincipal User user) {
+
+        return ResponseEntity.ok(
+                bookingService.getBookingsForUser(user.getId())
+        );
     }
 
     @GetMapping("/get_bookings_for_show/{show_id}")

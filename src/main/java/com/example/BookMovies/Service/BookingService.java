@@ -25,7 +25,7 @@ public class BookingService {
     @Autowired
     private UserRepository userRepository;
 
-    public Booking createBooking(BookingDTO bookingDto, User user){
+    public Booking createBooking(BookingDTO bookingDto, User _user){
         //validation for seatNumbers list size and numberOfSeats equality
         if(bookingDto.getSeatNumbers().size()!=bookingDto.getNumberOfSeats()){
             throw new RuntimeException("There is a mismatch in the number of seats and seat list size");
@@ -55,14 +55,13 @@ public class BookingService {
             throw new RuntimeException("Seats are already booked");
         }
 
-        User user = userRepository.findById(bookingDto.getUserId()).orElseThrow(()->new RuntimeException("No user found with the id "+bookingDto.getUserId()));
         Booking booking = new Booking();
         booking.setNumberOfSeats(bookingDto.getNumberOfSeats());
         booking.setBookingTime(LocalDateTime.now());
         booking.setBookingStatus(BookingStatus.PENDING);
         booking.setPrice(calculateTotalAmount(show.getPrice(), bookingDto.getNumberOfSeats()));
         booking.setSeatNumbers(bookingDto.getSeatNumbers());
-        booking.setUser(user);
+        booking.setUser(_user);
         booking.setShow(show);
 
         return bookingRepository.save(booking);
