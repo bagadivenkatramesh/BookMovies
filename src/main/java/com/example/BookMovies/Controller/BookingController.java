@@ -3,9 +3,11 @@ package com.example.BookMovies.Controller;
 import com.example.BookMovies.DTO.BookingDTO;
 import com.example.BookMovies.Entity.Booking;
 import com.example.BookMovies.Entity.BookingStatus;
+import com.example.BookMovies.Entity.User;
 import com.example.BookMovies.Service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +20,13 @@ public class BookingController {
     private BookingService bookingService;
 
     @PostMapping("/create_booking")
-    public ResponseEntity<Booking> createBooking(@RequestBody BookingDTO bookingDto){
-        return ResponseEntity.ok(bookingService.createBooking(bookingDto));
+    public ResponseEntity<Booking> createBooking(
+            @RequestBody BookingDTO bookingDto,
+            @AuthenticationPrincipal User user) {
+
+        return ResponseEntity.ok(
+                bookingService.createBooking(bookingDto, user)
+        );
     }
 
     @GetMapping("/get_bookings_for_user/{user_id}")

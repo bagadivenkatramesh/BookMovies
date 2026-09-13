@@ -25,7 +25,7 @@ public class BookingService {
     @Autowired
     private UserRepository userRepository;
 
-    public Booking createBooking(BookingDTO bookingDto){
+    public Booking createBooking(BookingDTO bookingDto, User user){
         //validation for seatNumbers list size and numberOfSeats equality
         if(bookingDto.getSeatNumbers().size()!=bookingDto.getNumberOfSeats()){
             throw new RuntimeException("There is a mismatch in the number of seats and seat list size");
