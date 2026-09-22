@@ -1,6 +1,7 @@
 package com.example.BookMovies.Controller;
 
 import com.example.BookMovies.DTO.ShowDTO;
+import com.example.BookMovies.DTO.ShowResponseDTO;
 import com.example.BookMovies.Entity.Show;
 import com.example.BookMovies.Service.ShowService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class ShowController {
 
     @PostMapping("/create_show")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Show> createShow(@RequestBody ShowDTO showDto){
+    public ResponseEntity<ShowResponseDTO> createShow(@RequestBody ShowDTO showDto){
         return ResponseEntity.ok(showService.createShow(showDto));
     }
 

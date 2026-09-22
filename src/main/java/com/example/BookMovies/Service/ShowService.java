@@ -1,6 +1,7 @@
 package com.example.BookMovies.Service;
 
 import com.example.BookMovies.DTO.ShowDTO;
+import com.example.BookMovies.DTO.ShowResponseDTO;
 import com.example.BookMovies.Entity.Booking;
 import com.example.BookMovies.Entity.Movie;
 import com.example.BookMovies.Entity.Show;
@@ -25,7 +26,7 @@ public class ShowService {
     @Autowired
     private TheaterRepository theaterRepository;
 
-    public Show createShow(ShowDTO showDto){
+    public ShowResponseDTO createShow(ShowDTO showDto){
         Movie movie = movieRepository.findById(showDto.getMovieId())
                 .orElseThrow(()->new RuntimeException("No movie found with id "+showDto.getMovieId()));
         Theater theater = theaterRepository.findById(showDto.getTheaterId())
@@ -35,7 +36,14 @@ public class ShowService {
         show.setPrice(showDto.getPrice());
         show.setMovie(movie);
         show.setTheater(theater);
-        return showRepository.save(show);
+        Show savedShow = showRepository.save(show);
+        return ShowResponseDTO.builder()
+                .id(savedShow.getId())
+                .time(savedShow.getTime())
+                .price(savedShow.getPrice())
+                .movieId(savedShow.getMovie().getId())
+                .theaterId(savedShow.getTheater().getId())
+                .build();
     }
 
     public Show updateShow(Long id, ShowDTO showDto){
