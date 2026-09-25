@@ -27,6 +27,10 @@ public class ShowService {
     private TheaterRepository theaterRepository;
 
     public ShowResponseDTO createShow(ShowDTO showDto){
+        //check if a show with the exact same start time exists in the theater
+        if(showRepository.existsByTimeAndTheaterId(showDto.getTime(), showDto.getTheaterId())){
+            throw new RuntimeException("A show already exists in this theater at this time");
+        }
         Movie movie = movieRepository.findById(showDto.getMovieId())
                 .orElseThrow(()->new RuntimeException("No movie found with id "+showDto.getMovieId()));
         Theater theater = theaterRepository.findById(showDto.getTheaterId())
