@@ -84,7 +84,14 @@ public class ShowService {
         return showRepository.findByMovieId(movieId);
     }
 
-    public List<Show> getShowsByTheater(Long theaterId){
-        return showRepository.findByTheaterId(theaterId);
+    public List<ShowResponseDTO> getShowsByTheater(Long theaterId){
+        List<Show> shows = showRepository.findByTheaterId(theaterId);
+        return shows.stream().map(show -> new ShowResponseDTO(
+                show.getId(),
+                show.getTime(),
+                show.getPrice(),
+                show.getMovie().getId(),
+                show.getTheater().getId()
+        )).toList();
     }
 }

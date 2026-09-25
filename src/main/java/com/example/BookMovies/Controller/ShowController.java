@@ -48,7 +48,7 @@ public class ShowController {
     }
 
     @GetMapping("/get_shows_by_theater/{theaterId}")
-    public ResponseEntity<List<Show>> getShowsByTheater(@PathVariable Long theaterId){
+    public ResponseEntity<List<ShowResponseDTO>> getShowsByTheater(@PathVariable Long theaterId){
         return ResponseEntity.ok(showService.getShowsByTheater(theaterId));
     }
 
