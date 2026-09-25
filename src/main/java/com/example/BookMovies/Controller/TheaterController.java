@@ -18,7 +18,7 @@ public class TheaterController {
     private TheaterService theaterService;
 
     @GetMapping("/get_theaters_by_location")
-    public ResponseEntity<List<Theater>> getTheatersByLocation(@RequestParam String location){
+    public ResponseEntity<List<TheaterDTO>> getTheatersByLocation(@RequestParam String location){
         return ResponseEntity.ok(theaterService.getTheatersByLocation(location));
     }
 

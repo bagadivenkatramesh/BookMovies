@@ -27,8 +27,16 @@ public class MovieService {
         return movieRepository.save(movie);
     }
 
-    public List<Movie> getAllMovies() {
-        return movieRepository.findAll();
+    public List<MovieDTO> getAllMovies() {
+        List<Movie> movies = movieRepository.findAll();
+        return movies.stream().map(movie -> new MovieDTO(
+                movie.getName(),
+                movie.getDescription(),
+                movie.getGenre(),
+                movie.getLanguage(),
+                movie.getReleaseDate(),
+                movie.getDuration()
+        )).toList();
     }
 
     public List<Movie> getMoviesByGenre(String genre){

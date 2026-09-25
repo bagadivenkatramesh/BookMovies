@@ -15,8 +15,16 @@ public class TheaterService {
     @Autowired
     private TheaterRepository theaterRepository;
 
-    public List<Theater> getTheatersByLocation(String location){
-        return theaterRepository.findByLocation(location);
+    public List<TheaterDTO> getTheatersByLocation(String location){
+        List<Theater> theaters = theaterRepository.findByLocation(location);
+        return theaters.stream().map(theater ->
+            new TheaterDTO(
+                    theater.getName(),
+                    theater.getLocation(),
+                    theater.getSeatCapacity(),
+                    theater.getScreenType()
+            )
+        ).toList();
     }
 
     public Theater addTheater(TheaterDTO theaterDto){

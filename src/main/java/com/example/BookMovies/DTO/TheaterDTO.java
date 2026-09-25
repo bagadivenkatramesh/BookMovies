@@ -1,8 +1,10 @@
 package com.example.BookMovies.DTO;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class TheaterDTO {
     private String name;
     private String location;
