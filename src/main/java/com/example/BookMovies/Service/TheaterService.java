@@ -19,6 +19,7 @@ public class TheaterService {
         List<Theater> theaters = theaterRepository.findByLocation(location);
         return theaters.stream().map(theater ->
             new TheaterDTO(
+                    theater.getId(),
                     theater.getName(),
                     theater.getLocation(),
                     theater.getSeatCapacity(),
