@@ -30,6 +30,7 @@ public class MovieService {
     public List<MovieDTO> getAllMovies() {
         List<Movie> movies = movieRepository.findAll();
         return movies.stream().map(movie -> new MovieDTO(
+                movie.getId(),
                 movie.getName(),
                 movie.getDescription(),
                 movie.getGenre(),
@@ -45,6 +46,19 @@ public class MovieService {
 
     public List<Movie> getMoviesByLanguage(String language){
         return movieRepository.findByLanguage(language);
+    }
+
+    public MovieDTO getMovieById(Long id){
+        Movie movie = movieRepository.findById(id).orElseThrow(()->new RuntimeException("No movie with the id found."));
+        return new MovieDTO(
+                movie.getId(),
+                movie.getName(),
+                movie.getDescription(),
+                movie.getGenre(),
+                movie.getLanguage(),
+                movie.getReleaseDate(),
+                movie.getDuration()
+        );
     }
 
     public Movie getMovieByTitle(String name){

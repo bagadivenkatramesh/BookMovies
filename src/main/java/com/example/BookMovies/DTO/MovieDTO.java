@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 public class MovieDTO {
+    private Long id;
     private String name;
     private String description;
     private String genre;

@@ -2,7 +2,7 @@ package com.example.BookMovies.Controller;
 
 import com.example.BookMovies.DTO.ShowDTO;
 import com.example.BookMovies.DTO.ShowResponseDTO;
-import com.example.BookMovies.DTO.ShowWithTheaterOrMovieDTO;
+import com.example.BookMovies.DTO.ShowDetailsDTO;
 import com.example.BookMovies.Entity.Show;
 import com.example.BookMovies.Service.ShowService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,12 +44,12 @@ public class ShowController {
     }
 
     @GetMapping("/get_shows_by_movie/{movieId}")
-    public ResponseEntity<List<Show>> getShowsByMovie(@PathVariable Long movieId){
+    public ResponseEntity<List<ShowDetailsDTO>> getShowsByMovie(@PathVariable Long movieId){
         return ResponseEntity.ok(showService.getShowsByMovie(movieId));
     }
 
     @GetMapping("/get_shows_by_theater/{theaterId}")
-    public ResponseEntity<List<ShowWithTheaterOrMovieDTO>> getShowsByTheater(@PathVariable Long theaterId){
+    public ResponseEntity<List<ShowDetailsDTO>> getShowsByTheater(@PathVariable Long theaterId){
         return ResponseEntity.ok(showService.getShowsByTheater(theaterId));
     }
 

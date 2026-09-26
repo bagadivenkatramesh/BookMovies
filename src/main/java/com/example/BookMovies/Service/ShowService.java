@@ -2,7 +2,7 @@ package com.example.BookMovies.Service;
 
 import com.example.BookMovies.DTO.ShowDTO;
 import com.example.BookMovies.DTO.ShowResponseDTO;
-import com.example.BookMovies.DTO.ShowWithTheaterOrMovieDTO;
+import com.example.BookMovies.DTO.ShowDetailsDTO;
 import com.example.BookMovies.Entity.Booking;
 import com.example.BookMovies.Entity.Movie;
 import com.example.BookMovies.Entity.Show;
@@ -81,21 +81,39 @@ public class ShowService {
         return showRepository.findAll();
     }
 
-    public List<Show> getShowsByMovie(Long movieId){
-        return showRepository.findByMovieId(movieId);
-    }
-
-    public List<ShowWithTheaterOrMovieDTO> getShowsByTheater(Long theaterId){
-        List<Show> shows = showRepository.findByTheaterId(theaterId);
-        return shows.stream().map(show -> new ShowWithTheaterOrMovieDTO(
+    public List<ShowDetailsDTO> getShowsByMovie(Long movieId){
+        List<Show> shows = showRepository.findByMovieId(movieId);
+        return shows.stream().map(show -> new ShowDetailsDTO(
                 show.getId(),
                 show.getTime(),
                 show.getPrice(),
                 show.getMovie().getId(),
-                show.getTheater().getId(),
                 show.getMovie().getName(),
                 show.getMovie().getLanguage(),
-                show.getMovie().getGenre()
+                show.getMovie().getGenre(),
+                show.getTheater().getId(),
+                show.getTheater().getName(),
+                show.getTheater().getLocation(),
+                show.getTheater().getScreenType(),
+                show.getTheater().getSeatCapacity()
+        )).toList();
+    }
+
+    public List<ShowDetailsDTO> getShowsByTheater(Long theaterId){
+        List<Show> shows = showRepository.findByTheaterId(theaterId);
+        return shows.stream().map(show -> new ShowDetailsDTO(
+                show.getId(),
+                show.getTime(),
+                show.getPrice(),
+                show.getMovie().getId(),
+                show.getMovie().getName(),
+                show.getMovie().getLanguage(),
+                show.getMovie().getGenre(),
+                show.getTheater().getId(),
+                show.getTheater().getName(),
+                show.getTheater().getLocation(),
+                show.getTheater().getScreenType(),
+                show.getTheater().getSeatCapacity()
         )).toList();
     }
 }

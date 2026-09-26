@@ -44,6 +44,11 @@ public class MovieController {
         return ResponseEntity.ok(movieService.getMovieByTitle(title));
     }
 
+    @GetMapping("/get_movie_by_id/{id}")
+    public ResponseEntity<MovieDTO> getMovieById(@PathVariable Long id){
+        return ResponseEntity.ok(movieService.getMovieById(id));
+    }
+
     @PutMapping("/update_movie/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Movie> updateMovie(@PathVariable Long id, @RequestBody MovieDTO movieDto){
