@@ -2,6 +2,7 @@ package com.example.BookMovies.Service;
 
 import com.example.BookMovies.DTO.ShowDTO;
 import com.example.BookMovies.DTO.ShowResponseDTO;
+import com.example.BookMovies.DTO.ShowWithTheaterOrMovieDTO;
 import com.example.BookMovies.Entity.Booking;
 import com.example.BookMovies.Entity.Movie;
 import com.example.BookMovies.Entity.Show;
@@ -84,14 +85,17 @@ public class ShowService {
         return showRepository.findByMovieId(movieId);
     }
 
-    public List<ShowResponseDTO> getShowsByTheater(Long theaterId){
+    public List<ShowWithTheaterOrMovieDTO> getShowsByTheater(Long theaterId){
         List<Show> shows = showRepository.findByTheaterId(theaterId);
-        return shows.stream().map(show -> new ShowResponseDTO(
+        return shows.stream().map(show -> new ShowWithTheaterOrMovieDTO(
                 show.getId(),
                 show.getTime(),
                 show.getPrice(),
                 show.getMovie().getId(),
-                show.getTheater().getId()
+                show.getTheater().getId(),
+                show.getMovie().getName(),
+                show.getMovie().getLanguage(),
+                show.getMovie().getGenre()
         )).toList();
     }
 }
