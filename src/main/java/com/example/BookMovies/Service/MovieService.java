@@ -2,6 +2,7 @@ package com.example.BookMovies.Service;
 
 import com.example.BookMovies.DTO.MovieDTO;
 import com.example.BookMovies.Entity.Movie;
+import com.example.BookMovies.Exception.ResourceNotFoundException;
 import com.example.BookMovies.Repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,7 +50,9 @@ public class MovieService {
     }
 
     public MovieDTO getMovieById(Long id){
-        Movie movie = movieRepository.findById(id).orElseThrow(()->new RuntimeException("No movie with the id found."));
+        Movie movie = movieRepository.findById(id).orElseThrow(
+                ()->new ResourceNotFoundException("No movie with the id:"+id+" found.")
+        );
         return new MovieDTO(
                 movie.getId(),
                 movie.getName(),
