@@ -1,6 +1,7 @@
 package com.example.BookMovies.Controller;
 
 import com.example.BookMovies.DTO.BookingDTO;
+import com.example.BookMovies.DTO.BookingResponseDTO;
 import com.example.BookMovies.Entity.Booking;
 import com.example.BookMovies.Entity.BookingStatus;
 import com.example.BookMovies.Entity.User;
@@ -20,17 +21,15 @@ public class BookingController {
     private BookingService bookingService;
 
     @PostMapping("/create_booking")
-    public ResponseEntity<Booking> createBooking(
+    public ResponseEntity<Void> createBooking(
             @RequestBody BookingDTO bookingDto,
             @AuthenticationPrincipal User user) {
-
-        return ResponseEntity.ok(
-                bookingService.createBooking(bookingDto, user)
-        );
+        bookingService.createBooking(bookingDto, user);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/my_bookings")
-    public ResponseEntity<List<Booking>> getMyBookings(
+    public ResponseEntity<List<BookingResponseDTO>> getMyBookings(
             @AuthenticationPrincipal User user) {
 
         return ResponseEntity.ok(
@@ -39,7 +38,7 @@ public class BookingController {
     }
 
     @GetMapping("/get_bookings_for_show/{show_id}")
-    public ResponseEntity<List<Booking>> getBookingsForShow(@PathVariable Long show_id){
+    public ResponseEntity<List<BookingResponseDTO>> getBookingsForShow(@PathVariable Long show_id){
         return ResponseEntity.ok(bookingService.getBookingsForShow(show_id));
     }
 

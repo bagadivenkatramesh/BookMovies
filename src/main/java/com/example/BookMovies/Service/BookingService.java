@@ -1,6 +1,7 @@
 package com.example.BookMovies.Service;
 
 import com.example.BookMovies.DTO.BookingDTO;
+import com.example.BookMovies.DTO.BookingResponseDTO;
 import com.example.BookMovies.Entity.*;
 import com.example.BookMovies.Repository.BookingRepository;
 import com.example.BookMovies.Repository.ShowRepository;
@@ -8,6 +9,7 @@ import com.example.BookMovies.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Book;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -25,7 +27,7 @@ public class BookingService {
     @Autowired
     private UserRepository userRepository;
 
-    public Booking createBooking(BookingDTO bookingDto, User _user){
+    public void createBooking(BookingDTO bookingDto, User _user){
         //validation for seatNumbers list size and numberOfSeats equality
         if(bookingDto.getSeatNumbers().size()!=bookingDto.getNumberOfSeats()){
             throw new RuntimeException("There is a mismatch in the number of seats and seat list size");
@@ -64,15 +66,51 @@ public class BookingService {
         booking.setUser(_user);
         booking.setShow(show);
 
-        return bookingRepository.save(booking);
+        bookingRepository.save(booking);
+        return;
+
     }
 
-    public List<Booking> getBookingsForUser(Long userId){
-        return bookingRepository.findByUserId(userId);
+    public List<BookingResponseDTO> getBookingsForUser(Long userId){
+        List<Booking> bookings = bookingRepository.findByUserId(userId);
+        return bookings.stream().map(booking -> new BookingResponseDTO(
+               booking.getId(),
+               booking.getNumberOfSeats(),
+               booking.getBookingTime(),
+               booking.getBookingStatus(),
+               booking.getPrice(),
+               booking.getSeatNumbers(),
+               booking.getShow().getId(),
+               booking.getUser().getId(),
+               booking.getShow().getTime(),
+               booking.getShow().getMovie().getName(),
+               booking.getShow().getMovie().getId(),
+               booking.getShow().getTheater().getName(),
+               booking.getShow().getTheater().getLocation(),
+               booking.getShow().getTheater().getScreenType()
+
+        )).toList();
     }
 
-    public List<Booking> getBookingsForShow(Long showId){
-        return bookingRepository.findByShowId(showId);
+    public List<BookingResponseDTO> getBookingsForShow(Long showId){
+        List<Booking> bookings = bookingRepository.findByShowId(showId);
+        return bookings.stream().map(booking -> new BookingResponseDTO(
+                booking.getId(),
+                booking.getNumberOfSeats(),
+                booking.getBookingTime(),
+                booking.getBookingStatus(),
+                booking.getPrice(),
+                booking.getSeatNumbers(),
+                booking.getShow().getId(),
+                booking.getUser().getId(),
+                booking.getShow().getTime(),
+                booking.getShow().getMovie().getName(),
+                booking.getShow().getMovie().getId(),
+                booking.getShow().getTheater().getName(),
+                booking.getShow().getTheater().getLocation(),
+                booking.getShow().getTheater().getScreenType()
+
+        )).toList();
     }
 
     public Booking confirmBooking(Long bookingId){
