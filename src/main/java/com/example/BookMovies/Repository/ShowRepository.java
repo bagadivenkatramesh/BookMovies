@@ -12,4 +12,5 @@ public interface ShowRepository extends JpaRepository<Show, Long> {
     public List<Show> findByMovieId(Long movieId);
     public List<Show> findByTheaterId(Long theaterId);
     public Boolean existsByTimeAndTheaterId(LocalDateTime time, Long theaterId);
+    public Boolean existsByTimeAndTheaterIdAndIdNot(LocalDateTime time, Long theaterId, Long id);
 }

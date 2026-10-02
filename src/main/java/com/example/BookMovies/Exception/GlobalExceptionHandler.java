@@ -21,11 +21,23 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicateResourceException.class)
     public ResponseEntity<ApiError> handleDuplicateResource(DuplicateResourceException exception){
-        return ResponseEntity.status(HttpStatus.CONFLICT.value())
+        return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(new ApiError(
                         HttpStatus.CONFLICT.value(),
                         exception.getMessage(),
                         LocalDateTime.now()
                 ));
+    }
+
+    @ExceptionHandler(InvalidOperationException.class)
+    public ResponseEntity<ApiError> handleInvalidOperation(InvalidOperationException exception){
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(
+                        new ApiError(
+                                HttpStatus.CONFLICT.value(),
+                                exception.getMessage(),
+                                LocalDateTime.now()
+                        )
+                );
     }
 }

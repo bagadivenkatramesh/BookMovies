@@ -7,6 +7,8 @@ import com.example.BookMovies.Entity.Booking;
 import com.example.BookMovies.Entity.Movie;
 import com.example.BookMovies.Entity.Show;
 import com.example.BookMovies.Entity.Theater;
+import com.example.BookMovies.Exception.DuplicateResourceException;
+import com.example.BookMovies.Exception.InvalidOperationException;
 import com.example.BookMovies.Exception.ResourceNotFoundException;
 import com.example.BookMovies.Repository.MovieRepository;
 import com.example.BookMovies.Repository.ShowRepository;
@@ -29,14 +31,14 @@ public class ShowService {
     private TheaterRepository theaterRepository;
 
     public ShowResponseDTO createShow(ShowDTO showDto){
-        //check if a show with the exact same start time exists in the theater
-        if(showRepository.existsByTimeAndTheaterId(showDto.getTime(), showDto.getTheaterId())){
-            throw new RuntimeException("A show already exists in this theater at this time");
-        }
         Movie movie = movieRepository.findById(showDto.getMovieId())
                 .orElseThrow(()->new ResourceNotFoundException("No movie found with id "+showDto.getMovieId()));
         Theater theater = theaterRepository.findById(showDto.getTheaterId())
                 .orElseThrow(()->new ResourceNotFoundException("No theatre found with id "+showDto.getTheaterId()));
+        //check if a show with the exact same start time exists in the theater
+        if(showRepository.existsByTimeAndTheaterId(showDto.getTime(), showDto.getTheaterId())){
+            throw new DuplicateResourceException("A show already exists in this theater at this time");
+        }
         Show show = new Show();
         show.setTime(showDto.getTime());
         show.setPrice(showDto.getPrice());
@@ -59,6 +61,9 @@ public class ShowService {
                 .orElseThrow(()->new ResourceNotFoundException("No movie found with id "+showDto.getMovieId()));
         Theater theater = theaterRepository.findById(showDto.getTheaterId())
                 .orElseThrow(()->new ResourceNotFoundException("No theatre found with id "+showDto.getTheaterId()));
+        if(showRepository.existsByTimeAndTheaterIdAndIdNot(showDto.getTime(), showDto.getTheaterId(), id)){
+            throw new DuplicateResourceException("A show already exists in this theater at this time");
+        }
         show.setTime(showDto.getTime());
         show.setPrice(showDto.getPrice());
         show.setMovie(movie);
@@ -74,7 +79,7 @@ public class ShowService {
         if(bookings.isEmpty()){
             showRepository.delete(show);
         }else{
-            throw new RuntimeException("Cannot delete this show as it has bookings");
+            throw new InvalidOperationException("Cannot delete this show as it has bookings");
         }
     }
 
