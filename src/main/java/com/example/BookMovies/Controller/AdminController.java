@@ -3,6 +3,7 @@ package com.example.BookMovies.Controller;
 import com.example.BookMovies.DTO.RegisterUserDTO;
 import com.example.BookMovies.Entity.User;
 import com.example.BookMovies.Service.AuthenticationService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,7 +21,7 @@ public class AdminController {
     private AuthenticationService authenticationService;
 
     @PostMapping("/register_admin_user")
-    public ResponseEntity<User> registerAdminUser(@RequestBody RegisterUserDTO registerUserDto){
+    public ResponseEntity<User> registerAdminUser(@Valid @RequestBody RegisterUserDTO registerUserDto){
         return ResponseEntity.ok(authenticationService.registerAdminUser(registerUserDto));
     }
 }

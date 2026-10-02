@@ -4,6 +4,9 @@ import com.example.BookMovies.DTO.MovieDTO;
 import com.example.BookMovies.Entity.Movie;
 import com.example.BookMovies.Service.MovieService;
 import jakarta.persistence.PostUpdate;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,7 +23,7 @@ public class MovieController {
 
     @PostMapping("/add_movie")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Movie> addMovie(@RequestBody MovieDTO movieDto){
+    public ResponseEntity<Movie> addMovie(@Valid @RequestBody MovieDTO movieDto){
         return ResponseEntity.ok(movieService.addMovie(movieDto));
     }
 
@@ -30,34 +33,34 @@ public class MovieController {
     }
 
     @GetMapping("/get_movies_by_genre")
-    public ResponseEntity<List<Movie>> getMoviesByGenre(@RequestParam String genre){
+    public ResponseEntity<List<Movie>> getMoviesByGenre(@NotBlank(message = "genre is required.") @RequestParam String genre){
         return ResponseEntity.ok(movieService.getMoviesByGenre(genre));
     }
 
     @GetMapping("/get_movies_by_language")
-    public ResponseEntity<List<Movie>> getMoviesByLanguage(@RequestParam String language){
+    public ResponseEntity<List<Movie>> getMoviesByLanguage(@NotBlank(message = "language is required.") @RequestParam String language){
         return ResponseEntity.ok(movieService.getMoviesByLanguage(language));
     }
 
     @GetMapping("/get_movie_by_title")
-    public ResponseEntity<Movie> getMovieByTitle(@RequestParam String title){
+    public ResponseEntity<Movie> getMovieByTitle(@NotBlank(message = "title is required.") @RequestParam String title){
         return ResponseEntity.ok(movieService.getMovieByTitle(title));
     }
 
     @GetMapping("/get_movie_by_id/{id}")
-    public ResponseEntity<MovieDTO> getMovieById(@PathVariable Long id){
+    public ResponseEntity<MovieDTO> getMovieById(@Positive(message = "Movie ID must be greater than 0") @PathVariable Long id){
         return ResponseEntity.ok(movieService.getMovieById(id));
     }
 
     @PutMapping("/update_movie/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Movie> updateMovie(@PathVariable Long id, @RequestBody MovieDTO movieDto){
+    public ResponseEntity<Movie> updateMovie(@Positive(message = "Movie ID must be greater than 0") @PathVariable Long id, @Valid @RequestBody MovieDTO movieDto){
         return ResponseEntity.ok(movieService.updateMovie(id,movieDto));
     }
 
     @DeleteMapping("/delete_movie/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> deleteMovie(@PathVariable Long id){
+    public ResponseEntity<Void> deleteMovie(@Positive(message = "Movie ID must be greater than 0") @PathVariable Long id){
         movieService.deleteMovie(id);
         return ResponseEntity.ok().build();
     }
