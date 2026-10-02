@@ -4,6 +4,7 @@ import com.example.BookMovies.DTO.LoginResponseDTO;
 import com.example.BookMovies.DTO.LoginUserDTO;
 import com.example.BookMovies.DTO.RegisterUserDTO;
 import com.example.BookMovies.Entity.User;
+import com.example.BookMovies.Exception.DuplicateResourceException;
 import com.example.BookMovies.JWT.JwtService;
 import com.example.BookMovies.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class AuthenticationService {
 
     public User registerNormalUser(RegisterUserDTO registerUserDto){
         if(userRepository.findByUsername(registerUserDto.getUsername()).isPresent()){
-            throw new RuntimeException("User with the username "+registerUserDto.getUsername()+" already exists");
+            throw new DuplicateResourceException("User with the username "+registerUserDto.getUsername()+" already exists");
         }
         User user = new User();
         Set<String> roles = new HashSet<>();
@@ -47,7 +48,7 @@ public class AuthenticationService {
 
     public User registerAdminUser(RegisterUserDTO registerUserDto){
         if(userRepository.findByUsername(registerUserDto.getUsername()).isPresent()){
-            throw new RuntimeException("Admin user with the username "+registerUserDto.getUsername()+" already exists");
+            throw new DuplicateResourceException("Admin user with the username "+registerUserDto.getUsername()+" already exists");
         }
         User user = new User();
         Set<String> roles = new HashSet<>();
