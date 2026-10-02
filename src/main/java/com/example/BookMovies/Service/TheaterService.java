@@ -2,6 +2,8 @@ package com.example.BookMovies.Service;
 
 import com.example.BookMovies.DTO.TheaterDTO;
 import com.example.BookMovies.Entity.Theater;
+import com.example.BookMovies.Exception.DuplicateResourceException;
+import com.example.BookMovies.Exception.ResourceNotFoundException;
 import com.example.BookMovies.Repository.TheaterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,9 @@ public class TheaterService {
     }
 
     public Theater addTheater(TheaterDTO theaterDto){
+        if(theaterRepository.existsByNameAndLocation(theaterDto.getName(), theaterDto.getLocation())){
+            throw new DuplicateResourceException("A theater with the same name and location already exsists.");
+        }
         Theater theater = new Theater();
         theater.setName(theaterDto.getName());
         theater.setLocation(theaterDto.getLocation());
@@ -49,7 +54,7 @@ public class TheaterService {
 
             return theaterRepository.save(theater);
         }else{
-            throw new RuntimeException("No such theater found");
+            throw new ResourceNotFoundException("No theater found with id:"+id);
         }
     }
 

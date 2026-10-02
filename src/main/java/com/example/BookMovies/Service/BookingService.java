@@ -3,6 +3,7 @@ package com.example.BookMovies.Service;
 import com.example.BookMovies.DTO.BookingDTO;
 import com.example.BookMovies.DTO.BookingResponseDTO;
 import com.example.BookMovies.Entity.*;
+import com.example.BookMovies.Exception.ResourceNotFoundException;
 import com.example.BookMovies.Repository.BookingRepository;
 import com.example.BookMovies.Repository.ShowRepository;
 import com.example.BookMovies.Repository.UserRepository;
@@ -35,7 +36,7 @@ public class BookingService {
 
         //seat availability check
         Show show = showRepository.findById(bookingDto.getShowId())
-                .orElseThrow(()->new RuntimeException("No show exists with id "+bookingDto.getShowId()));
+                .orElseThrow(()->new ResourceNotFoundException("No show exists with id "+bookingDto.getShowId()));
         int totalCapacity = show.getTheater().getSeatCapacity();
         int bookedSeats = show.getBookings().stream()
                               .filter(booking -> booking.getBookingStatus() != BookingStatus.CANCELLED)
@@ -114,7 +115,7 @@ public class BookingService {
     }
 
     public Booking confirmBooking(Long bookingId){
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(()->new RuntimeException("No booking found with the booking id "+bookingId));
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(()->new ResourceNotFoundException("No booking found with the booking id "+bookingId));
         if(booking.getBookingStatus()!=BookingStatus.PENDING){
             throw new RuntimeException("Booking is not in pending state");
         }
@@ -124,7 +125,7 @@ public class BookingService {
     }
 
     public Booking cancelBooking(Long bookingId){
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(()->new RuntimeException("No booking found with the booking id "+bookingId));
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(()->new ResourceNotFoundException("No booking found with the booking id "+bookingId));
         validateCancellation(booking);
         booking.setBookingStatus(BookingStatus.CANCELLED);
         return bookingRepository.save(booking);

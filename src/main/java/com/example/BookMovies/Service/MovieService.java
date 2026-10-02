@@ -69,7 +69,7 @@ public class MovieService {
         if(movieOptional.isPresent()){
             return movieOptional.get();
         }else{
-            throw new RuntimeException("No movie found for the name "+name);
+            throw new ResourceNotFoundException("No movie found for the name "+name);
         }
     }
 
@@ -85,7 +85,7 @@ public class MovieService {
             movie.setDuration(movieDto.getDuration());
             return movieRepository.save(movie);
         }else{
-            throw new RuntimeException("No such movie found");
+            throw new ResourceNotFoundException("No such movie found");
         }
     }
 

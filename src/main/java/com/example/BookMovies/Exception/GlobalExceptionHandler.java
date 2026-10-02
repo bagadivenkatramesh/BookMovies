@@ -18,4 +18,14 @@ public class GlobalExceptionHandler {
                         LocalDateTime.now()
                 ));
     }
+
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<ApiError> handleDuplicateResource(DuplicateResourceException exception){
+        return ResponseEntity.status(HttpStatus.CONFLICT.value())
+                .body(new ApiError(
+                        HttpStatus.CONFLICT.value(),
+                        exception.getMessage(),
+                        LocalDateTime.now()
+                ));
+    }
 }
