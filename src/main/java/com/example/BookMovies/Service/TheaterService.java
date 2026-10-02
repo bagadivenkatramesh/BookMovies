@@ -32,7 +32,7 @@ public class TheaterService {
 
     public Theater addTheater(TheaterDTO theaterDto){
         if(theaterRepository.existsByNameAndLocation(theaterDto.getName(), theaterDto.getLocation())){
-            throw new DuplicateResourceException("A theater with the same name and location already exsists.");
+            throw new DuplicateResourceException("A theater with the same name and location already exists.");
         }
         Theater theater = new Theater();
         theater.setName(theaterDto.getName());
@@ -43,19 +43,31 @@ public class TheaterService {
         return theaterRepository.save(theater);
     }
 
-    public Theater updateTheater(Long id, TheaterDTO theaterDto){
-        Optional<Theater> theaterOptional = theaterRepository.findById(id);
-        if(theaterOptional.isPresent()){
-            Theater theater = theaterOptional.get();
-            theater.setName(theaterDto.getName());
-            theater.setLocation(theaterDto.getLocation());
-            theater.setSeatCapacity(theaterDto.getSeatCapacity());
-            theater.setScreenType(theaterDto.getScreenType());
+    public Theater updateTheater(Long id, TheaterDTO theaterDto) {
 
-            return theaterRepository.save(theater);
-        }else{
-            throw new ResourceNotFoundException("No theater found with id:"+id);
+        Theater theater = theaterRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "No theater found with id: " + id
+                        )
+                );
+
+        if (theaterRepository.existsByNameAndLocationAndIdNot(
+                theaterDto.getName(),
+                theaterDto.getLocation(),
+                id)) {
+
+            throw new DuplicateResourceException(
+                    "A theater with the same name and location already exists."
+            );
         }
+
+        theater.setName(theaterDto.getName());
+        theater.setLocation(theaterDto.getLocation());
+        theater.setSeatCapacity(theaterDto.getSeatCapacity());
+        theater.setScreenType(theaterDto.getScreenType());
+
+        return theaterRepository.save(theater);
     }
 
     public void deleteTheater(Long id){

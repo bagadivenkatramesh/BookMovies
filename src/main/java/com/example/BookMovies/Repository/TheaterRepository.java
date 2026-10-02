@@ -10,4 +10,5 @@ import java.util.List;
 public interface TheaterRepository extends JpaRepository<Theater, Long> {
     public List<Theater> findByLocation(String location);
     public Boolean existsByNameAndLocation(String name, String location);
+    public Boolean existsByNameAndLocationAndIdNot(String name, String location, Long id);
 }
