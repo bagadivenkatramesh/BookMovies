@@ -32,7 +32,7 @@ public class AuthenticationService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User registerNormalUser(RegisterUserDTO registerUserDto){
+    public String registerNormalUser(RegisterUserDTO registerUserDto){
         if(userRepository.findByUsername(registerUserDto.getUsername()).isPresent()){
             throw new DuplicateResourceException("User with the username "+registerUserDto.getUsername()+" already exists");
         }
@@ -43,21 +43,24 @@ public class AuthenticationService {
         user.setEmail(registerUserDto.getEmail());
         user.setPassword(passwordEncoder.encode(registerUserDto.getPassword()));
         user.setRoles(roles);
-        return userRepository.save(user);
+        userRepository.save(user);
+        return "User created successfully";
     }
 
-    public User registerAdminUser(RegisterUserDTO registerUserDto){
-        if(userRepository.findByUsername(registerUserDto.getUsername()).isPresent()){
-            throw new DuplicateResourceException("Admin user with the username "+registerUserDto.getUsername()+" already exists");
+    public String registerAdminUser(RegisterUserDTO registerUserDto) {
+        if (userRepository.findByUsername(registerUserDto.getUsername()).isPresent()) {
+            throw new DuplicateResourceException("Admin user with the username " + registerUserDto.getUsername() + " already exists");
         }
         User user = new User();
         Set<String> roles = new HashSet<>();
-        roles.add("ROLE_USER"); roles.add("ROLE_ADMIN");
+        roles.add("ROLE_USER");
+        roles.add("ROLE_ADMIN");
         user.setUsername(registerUserDto.getUsername());
         user.setEmail(registerUserDto.getEmail());
         user.setPassword(passwordEncoder.encode(registerUserDto.getPassword()));
         user.setRoles(roles);
-        return userRepository.save(user);
+        userRepository.save(user);
+        return "User created successfully";
     }
 
     public LoginResponseDTO login(LoginUserDTO loginUserDto){
