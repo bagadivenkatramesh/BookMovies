@@ -1,9 +1,9 @@
 package com.example.BookMovies.Controller;
 
 import com.example.BookMovies.DTO.MovieDTO;
+import com.example.BookMovies.DTO.MovieResponseDTO;
 import com.example.BookMovies.Entity.Movie;
 import com.example.BookMovies.Service.MovieService;
-import jakarta.persistence.PostUpdate;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -28,7 +28,7 @@ public class MovieController {
     }
 
     @GetMapping("/get_all_movies")
-    public ResponseEntity<List<MovieDTO>> getAllMovies(){
+    public ResponseEntity<List<MovieResponseDTO>> getAllMovies(){
         return ResponseEntity.ok(movieService.getAllMovies());
     }
 
@@ -48,7 +48,7 @@ public class MovieController {
     }
 
     @GetMapping("/get_movie_by_id/{id}")
-    public ResponseEntity<MovieDTO> getMovieById(@Positive(message = "Movie ID must be greater than 0") @PathVariable Long id){
+    public ResponseEntity<MovieResponseDTO> getMovieById(@Positive(message = "Movie ID must be greater than 0") @PathVariable Long id){
         return ResponseEntity.ok(movieService.getMovieById(id));
     }
 

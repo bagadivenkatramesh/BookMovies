@@ -9,9 +9,6 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 public class MovieDTO {
-    @NotNull
-    @Positive(message = "Movie ID must be greater that 0.") //not needed in create movie part, but needed in update movie part
-    private Long id;
 
     @NotBlank(message = "Movie name is required.")
     private String name;

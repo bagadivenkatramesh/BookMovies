@@ -1,6 +1,7 @@
 package com.example.BookMovies.Service;
 
 import com.example.BookMovies.DTO.MovieDTO;
+import com.example.BookMovies.DTO.MovieResponseDTO;
 import com.example.BookMovies.Entity.Movie;
 import com.example.BookMovies.Exception.ResourceNotFoundException;
 import com.example.BookMovies.Repository.MovieRepository;
@@ -28,9 +29,9 @@ public class MovieService {
         return movieRepository.save(movie);
     }
 
-    public List<MovieDTO> getAllMovies() {
+    public List<MovieResponseDTO> getAllMovies() {
         List<Movie> movies = movieRepository.findAll();
-        return movies.stream().map(movie -> new MovieDTO(
+        return movies.stream().map(movie -> new MovieResponseDTO(
                 movie.getId(),
                 movie.getName(),
                 movie.getDescription(),
@@ -49,11 +50,11 @@ public class MovieService {
         return movieRepository.findByLanguage(language);
     }
 
-    public MovieDTO getMovieById(Long id){
+    public MovieResponseDTO getMovieById(Long id){
         Movie movie = movieRepository.findById(id).orElseThrow(
                 ()->new ResourceNotFoundException("No movie with the id:"+id+" found.")
         );
-        return new MovieDTO(
+        return new MovieResponseDTO(
                 movie.getId(),
                 movie.getName(),
                 movie.getDescription(),
