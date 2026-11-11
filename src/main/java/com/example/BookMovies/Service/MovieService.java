@@ -25,6 +25,7 @@ public class MovieService {
         movie.setLanguage(movieDto.getLanguage());
         movie.setReleaseDate(movieDto.getReleaseDate());
         movie.setDuration(movieDto.getDuration());
+        movie.setPosterUrl(movieDto.getPosterUrl());
 
         return movieRepository.save(movie);
     }
@@ -38,7 +39,8 @@ public class MovieService {
                 movie.getGenre(),
                 movie.getLanguage(),
                 movie.getReleaseDate(),
-                movie.getDuration()
+                movie.getDuration(),
+                movie.getPosterUrl()
         )).toList();
     }
 
@@ -61,7 +63,8 @@ public class MovieService {
                 movie.getGenre(),
                 movie.getLanguage(),
                 movie.getReleaseDate(),
-                movie.getDuration()
+                movie.getDuration(),
+                movie.getPosterUrl()
         );
     }
 
@@ -84,6 +87,7 @@ public class MovieService {
             movie.setLanguage(movieDto.getLanguage());
             movie.setReleaseDate(movieDto.getReleaseDate());
             movie.setDuration(movieDto.getDuration());
+            movie.setPosterUrl(movieDto.getPosterUrl());
             return movieRepository.save(movie);
         }else{
             throw new ResourceNotFoundException("No such movie found");

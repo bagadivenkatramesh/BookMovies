@@ -21,6 +21,7 @@ public class Movie {
     private String language;
     private LocalDate releaseDate;
     private Integer duration;
+    private String posterUrl;
 
     @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY)
     private List<Show> shows;
