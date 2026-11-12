@@ -193,10 +193,25 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-    public List<Booking> getBookingsByStatus(
+    public List<BookingResponseDTO> getBookingsByStatus(
             BookingStatus bookingStatus) {
-
-        return bookingRepository.findByBookingStatus(bookingStatus);
+        List<Booking> bookings = bookingRepository.findByBookingStatus(bookingStatus);
+        return bookings.stream().map(booking -> new BookingResponseDTO(
+                booking.getId(),
+                booking.getNumberOfSeats(),
+                booking.getBookingTime(),
+                booking.getBookingStatus(),
+                booking.getPrice(),
+                booking.getSeatNumbers(),
+                booking.getShow().getId(),
+                booking.getUser().getId(),
+                booking.getShow().getTime(),
+                booking.getShow().getMovie().getName(),
+                booking.getShow().getMovie().getId(),
+                booking.getShow().getTheater().getName(),
+                booking.getShow().getTheater().getLocation(),
+                booking.getShow().getTheater().getScreenType()
+        )).toList();
     }
 
     public void validateCancellation(Booking booking) {

@@ -8,6 +8,7 @@ import com.example.BookMovies.Entity.User;
 import com.example.BookMovies.Service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +39,7 @@ public class BookingController {
     }
 
     @GetMapping("/get_bookings_for_show/{show_id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<BookingResponseDTO>> getBookingsForShow(@PathVariable Long show_id){
         return ResponseEntity.ok(bookingService.getBookingsForShow(show_id));
     }
@@ -53,7 +55,8 @@ public class BookingController {
     }
 
     @GetMapping("/get_bookings_by_status/{booking_status}")
-    public ResponseEntity<List<Booking>> getBookingsByStatus(@PathVariable BookingStatus booking_status){
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<BookingResponseDTO>> getBookingsByStatus(@PathVariable BookingStatus booking_status){
         return ResponseEntity.ok(bookingService.getBookingsByStatus(booking_status));
     }
 }
