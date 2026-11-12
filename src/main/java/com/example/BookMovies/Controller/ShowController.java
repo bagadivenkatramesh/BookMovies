@@ -39,7 +39,7 @@ public class ShowController {
     }
 
     @GetMapping("/get_all_shows")
-    public ResponseEntity<List<Show>> getAllShows(){
+    public ResponseEntity<List<ShowResponseDTO>> getAllShows(){
         return ResponseEntity.ok(showService.getAllShows());
     }
 

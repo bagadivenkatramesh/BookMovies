@@ -13,8 +13,7 @@ public class ShowResponseDTO {
     private Long id;
     private LocalDateTime time;
     private Double price;
-    private Long movieId;
-    private Long theaterId;
+    private String movie;
+    private String theater;
+    private String theaterLocation;
 }
-
-//purpose of this line - to maintain daily github commit activity, LOL

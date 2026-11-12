@@ -49,8 +49,9 @@ public class ShowService {
                 .id(savedShow.getId())
                 .time(savedShow.getTime())
                 .price(savedShow.getPrice())
-                .movieId(savedShow.getMovie().getId())
-                .theaterId(savedShow.getTheater().getId())
+                .movie(savedShow.getMovie().getName())
+                .theater(savedShow.getTheater().getName())
+                .theaterLocation(savedShow.getTheater().getLocation())
                 .build();
     }
 
@@ -83,8 +84,16 @@ public class ShowService {
         }
     }
 
-    public List<Show> getAllShows(){
-        return showRepository.findAll();
+    public List<ShowResponseDTO> getAllShows(){
+        List<Show> shows = showRepository.findAll();
+        return shows.stream().map(show->new ShowResponseDTO(
+                show.getId(),
+                show.getTime(),
+                show.getPrice(),
+                show.getMovie().getName(),
+                show.getTheater().getName(),
+                show.getTheater().getLocation()
+        )).toList();
     }
 
     public List<ShowDetailsDTO> getShowsByMovie(Long movieId){
