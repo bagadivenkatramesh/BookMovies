@@ -41,7 +41,7 @@ public class BookingService {
             );
         }
 
-        // Seat availability check
+        // show availability check
         Show show = showRepository.findById(bookingDto.getShowId())
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
