@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,9 +36,17 @@ public class BookingService {
         // Validation for seatNumbers list size and numberOfSeats equality
         if (bookingDto.getSeatNumbers().size() != bookingDto.getNumberOfSeats()) {
 
-            // CHANGED
             throw new InvalidBookingException(
                     "There is a mismatch in the number of seats and seat list size"
+            );
+        }
+
+        //check for no duplicate seats in the incoming request
+        if (new HashSet<>(bookingDto.getSeatNumbers()).size()
+                != bookingDto.getSeatNumbers().size()) {
+
+            throw new InvalidBookingException(
+                    "Duplicate seat numbers in booking request"
             );
         }
 
@@ -48,7 +57,11 @@ public class BookingService {
                                 "No show exists with id " + bookingDto.getShowId()
                         )
                 );
+        //TO DO - a check to ensure that the incoming request doesn't contains seats which doesn't exist in the theater
+        //for example. let's say the theater has seats A1 to A10. incoming request with a seat B5 should not pass
+        //this requires modifications in the Theater entity and introduction of a new @ElementCollection in the Theater entity
 
+        //seat availability check using number of seats
         int totalCapacity = show.getTheater().getSeatCapacity();
 
         int bookedSeats = show.getBookings().stream()
@@ -59,7 +72,6 @@ public class BookingService {
 
         if (totalCapacity - bookedSeats < bookingDto.getNumberOfSeats()) {
 
-            // CHANGED
             throw new SeatUnavailableException(
                     "Not enough seats are available"
             );
@@ -79,7 +91,6 @@ public class BookingService {
 
         if (!duplicateSeats.isEmpty()) {
 
-            // CHANGED
             throw new SeatUnavailableException(
                     "Seats are already booked: " + duplicateSeats
             );
