@@ -44,12 +44,32 @@ public class MovieService {
         )).toList();
     }
 
-    public List<Movie> getMoviesByGenre(String genre){
-        return movieRepository.findByGenre(genre);
+    public List<MovieResponseDTO> getMoviesByGenre(String genre){
+        List<Movie> movies = movieRepository.findByGenre(genre);
+        return movies.stream().map(movie -> new MovieResponseDTO(
+                movie.getId(),
+                movie.getName(),
+                movie.getDescription(),
+                movie.getGenre(),
+                movie.getLanguage(),
+                movie.getReleaseDate(),
+                movie.getDuration(),
+                movie.getPosterUrl()
+        )).toList();
     }
 
-    public List<Movie> getMoviesByLanguage(String language){
-        return movieRepository.findByLanguage(language);
+    public List<MovieResponseDTO> getMoviesByLanguage(String language){
+        List<Movie> movies = movieRepository.findByLanguage(language);
+        return movies.stream().map(movie -> new MovieResponseDTO(
+                movie.getId(),
+                movie.getName(),
+                movie.getDescription(),
+                movie.getGenre(),
+                movie.getLanguage(),
+                movie.getReleaseDate(),
+                movie.getDuration(),
+                movie.getPosterUrl()
+        )).toList();
     }
 
     public MovieResponseDTO getMovieById(Long id){
@@ -68,10 +88,20 @@ public class MovieService {
         );
     }
 
-    public Movie getMovieByTitle(String name){
+    public MovieResponseDTO getMovieByTitle(String name){
         Optional<Movie> movieOptional = movieRepository.findByName(name);
         if(movieOptional.isPresent()){
-            return movieOptional.get();
+            Movie movie = movieOptional.get();
+            return new MovieResponseDTO(
+                    movie.getId(),
+                    movie.getName(),
+                    movie.getDescription(),
+                    movie.getGenre(),
+                    movie.getLanguage(),
+                    movie.getReleaseDate(),
+                    movie.getDuration(),
+                    movie.getPosterUrl()
+            );
         }else{
             throw new ResourceNotFoundException("No movie found for the name "+name);
         }

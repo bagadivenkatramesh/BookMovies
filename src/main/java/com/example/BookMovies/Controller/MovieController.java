@@ -33,17 +33,17 @@ public class MovieController {
     }
 
     @GetMapping("/get_movies_by_genre")
-    public ResponseEntity<List<Movie>> getMoviesByGenre(@NotBlank(message = "genre is required.") @RequestParam String genre){
+    public ResponseEntity<List<MovieResponseDTO>> getMoviesByGenre(@NotBlank(message = "genre is required.") @RequestParam String genre){
         return ResponseEntity.ok(movieService.getMoviesByGenre(genre));
     }
 
     @GetMapping("/get_movies_by_language")
-    public ResponseEntity<List<Movie>> getMoviesByLanguage(@NotBlank(message = "language is required.") @RequestParam String language){
+    public ResponseEntity<List<MovieResponseDTO>> getMoviesByLanguage(@NotBlank(message = "language is required.") @RequestParam String language){
         return ResponseEntity.ok(movieService.getMoviesByLanguage(language));
     }
 
     @GetMapping("/get_movie_by_title")
-    public ResponseEntity<Movie> getMovieByTitle(@NotBlank(message = "title is required.") @RequestParam String title){
+    public ResponseEntity<MovieResponseDTO> getMovieByTitle(@NotBlank(message = "title is required.") @RequestParam String title){
         return ResponseEntity.ok(movieService.getMovieByTitle(title));
     }
 
