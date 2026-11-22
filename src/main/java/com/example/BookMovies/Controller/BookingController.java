@@ -39,7 +39,6 @@ public class BookingController {
     }
 
     @GetMapping("/get_bookings_for_show/{show_id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<BookingResponseDTO>> getBookingsForShow(@PathVariable Long show_id){
         return ResponseEntity.ok(bookingService.getBookingsForShow(show_id));
     }
