@@ -76,6 +76,10 @@ The application uses the following primary entities:
 
 JPA and Hibernate handle object-relational mapping and database interactions.
 
+### Entity Relationship Diagram
+
+![BookMovies ER Diagram](docs/images/er-diagram.png)
+
 ## Authentication and Authorization
 
 The application uses **Spring Security with JWT-based authentication**.
