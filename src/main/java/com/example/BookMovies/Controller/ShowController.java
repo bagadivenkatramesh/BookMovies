@@ -6,6 +6,7 @@ import com.example.BookMovies.DTO.ShowDetailsDTO;
 import com.example.BookMovies.Entity.Show;
 import com.example.BookMovies.Service.ShowService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +23,12 @@ public class ShowController {
     @PostMapping("/create_show")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ShowResponseDTO> createShow(@RequestBody ShowDTO showDto){
-        return ResponseEntity.ok(showService.createShow(showDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(showService.createShow(showDto));
     }
 
     @PutMapping("/update_show/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Show> updateShow(@PathVariable Long id, @RequestBody ShowDTO showDto){
+    public ResponseEntity<String> updateShow(@PathVariable Long id, @RequestBody ShowDTO showDto){
         return ResponseEntity.ok(showService.updateShow(id, showDto));
     }
 
@@ -35,7 +36,7 @@ public class ShowController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteShow(@PathVariable Long id){
         showService.deleteShow(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/get_all_shows")

@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +24,8 @@ public class MovieController {
 
     @PostMapping("/add_movie")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Movie> addMovie(@Valid @RequestBody MovieDTO movieDto){
-        return ResponseEntity.ok(movieService.addMovie(movieDto));
+    public ResponseEntity<String> addMovie(@Valid @RequestBody MovieDTO movieDto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(movieService.addMovie(movieDto));
     }
 
     @GetMapping("/get_all_movies")
@@ -54,7 +55,7 @@ public class MovieController {
 
     @PutMapping("/update_movie/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Movie> updateMovie(@Positive(message = "Movie ID must be greater than 0") @PathVariable Long id, @Valid @RequestBody MovieDTO movieDto){
+    public ResponseEntity<String> updateMovie(@Positive(message = "Movie ID must be greater than 0") @PathVariable Long id, @Valid @RequestBody MovieDTO movieDto){
         return ResponseEntity.ok(movieService.updateMovie(id,movieDto));
     }
 
@@ -62,6 +63,6 @@ public class MovieController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteMovie(@Positive(message = "Movie ID must be greater than 0") @PathVariable Long id){
         movieService.deleteMovie(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

@@ -7,6 +7,7 @@ import com.example.BookMovies.Entity.User;
 import com.example.BookMovies.Service.AuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +26,7 @@ public class AuthController {
 
     @PostMapping("/register_normal_user")
     public ResponseEntity<String> registerNormalUser(@Valid @RequestBody RegisterUserDTO registerUserDto){
-        return ResponseEntity.ok(authenticationService.registerNormalUser(registerUserDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.registerNormalUser(registerUserDto));
     }
 
     @PostMapping("/login")

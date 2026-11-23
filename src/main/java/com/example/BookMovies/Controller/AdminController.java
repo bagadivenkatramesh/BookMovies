@@ -5,6 +5,7 @@ import com.example.BookMovies.Entity.User;
 import com.example.BookMovies.Service.AuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,6 @@ public class AdminController {
 
     @PostMapping("/register_admin_user")
     public ResponseEntity<String> registerAdminUser(@Valid @RequestBody RegisterUserDTO registerUserDto){
-        return ResponseEntity.ok(authenticationService.registerAdminUser(registerUserDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.registerAdminUser(registerUserDto));
     }
 }

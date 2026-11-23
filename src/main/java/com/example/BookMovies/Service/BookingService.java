@@ -31,7 +31,7 @@ public class BookingService {
     @Autowired
     private UserRepository userRepository;
 
-    public void createBooking(BookingDTO bookingDto, User _user) {
+    public String createBooking(BookingDTO bookingDto, User _user) {
 
         // Validation for seatNumbers list size and numberOfSeats equality
         if (bookingDto.getSeatNumbers().size() != bookingDto.getNumberOfSeats()) {
@@ -112,6 +112,7 @@ public class BookingService {
         booking.setShow(show);
 
         bookingRepository.save(booking);
+        return "Booking created successfully";
     }
 
     public List<BookingResponseDTO> getBookingsForUser(Long userId) {
@@ -164,7 +165,7 @@ public class BookingService {
                 .toList();
     }
 
-    public Booking confirmBooking(Long bookingId) {
+    public String confirmBooking(Long bookingId) {
 
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() ->
@@ -185,10 +186,11 @@ public class BookingService {
 
         booking.setBookingStatus(BookingStatus.CONFIRMED);
 
-        return bookingRepository.save(booking);
+        bookingRepository.save(booking);
+        return "Booking confirmed successfully";
     }
 
-    public Booking cancelBooking(Long bookingId) {
+    public String cancelBooking(Long bookingId) {
 
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() ->
@@ -201,7 +203,8 @@ public class BookingService {
 
         booking.setBookingStatus(BookingStatus.CANCELLED);
 
-        return bookingRepository.save(booking);
+        bookingRepository.save(booking);
+        return "Booking cancelled successfully";
     }
 
     public List<BookingResponseDTO> getBookingsByStatus(

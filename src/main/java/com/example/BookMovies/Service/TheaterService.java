@@ -30,7 +30,7 @@ public class TheaterService {
         ).toList();
     }
 
-    public Theater addTheater(TheaterDTO theaterDto){
+    public String addTheater(TheaterDTO theaterDto){
         if(theaterRepository.existsByNameAndLocation(theaterDto.getName(), theaterDto.getLocation())){
             throw new DuplicateResourceException("A theater with the same name and location already exists.");
         }
@@ -40,10 +40,12 @@ public class TheaterService {
         theater.setSeatCapacity(theaterDto.getSeatCapacity());
         theater.setScreenType(theaterDto.getScreenType());
 
-        return theaterRepository.save(theater);
+        theaterRepository.save(theater);
+
+        return "Theater added successfully";
     }
 
-    public Theater updateTheater(Long id, TheaterDTO theaterDto) {
+    public String updateTheater(Long id, TheaterDTO theaterDto) {
 
         Theater theater = theaterRepository.findById(id)
                 .orElseThrow(() ->
@@ -67,7 +69,9 @@ public class TheaterService {
         theater.setSeatCapacity(theaterDto.getSeatCapacity());
         theater.setScreenType(theaterDto.getScreenType());
 
-        return theaterRepository.save(theater);
+        theaterRepository.save(theater);
+
+        return "Theater updated successfully";
     }
 
     public void deleteTheater(Long id){

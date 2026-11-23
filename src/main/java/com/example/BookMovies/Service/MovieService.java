@@ -17,7 +17,7 @@ public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
 
-    public Movie addMovie(MovieDTO movieDto){
+    public String addMovie(MovieDTO movieDto){
         Movie movie = new Movie();
         movie.setName(movieDto.getName());
         movie.setDescription(movieDto.getDescription());
@@ -27,7 +27,8 @@ public class MovieService {
         movie.setDuration(movieDto.getDuration());
         movie.setPosterUrl(movieDto.getPosterUrl());
 
-        return movieRepository.save(movie);
+        movieRepository.save(movie);
+        return "Movie created successfully";
     }
 
     public List<MovieResponseDTO> getAllMovies() {
@@ -107,7 +108,7 @@ public class MovieService {
         }
     }
 
-    public Movie updateMovie(Long id, MovieDTO movieDto){
+    public String updateMovie(Long id, MovieDTO movieDto){
         Optional<Movie> movieOptional = movieRepository.findById(id);
         if(movieOptional.isPresent()){
             Movie movie = movieOptional.get();
@@ -118,7 +119,8 @@ public class MovieService {
             movie.setReleaseDate(movieDto.getReleaseDate());
             movie.setDuration(movieDto.getDuration());
             movie.setPosterUrl(movieDto.getPosterUrl());
-            return movieRepository.save(movie);
+            movieRepository.save(movie);
+            return "Movie updated successfully";
         }else{
             throw new ResourceNotFoundException("No such movie found");
         }

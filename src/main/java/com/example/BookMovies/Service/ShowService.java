@@ -55,7 +55,7 @@ public class ShowService {
                 .build();
     }
 
-    public Show updateShow(Long id, ShowDTO showDto){
+    public String updateShow(Long id, ShowDTO showDto){
         Show show = showRepository.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("No show found with id "+id));
         Movie movie = movieRepository.findById(showDto.getMovieId())
@@ -70,7 +70,9 @@ public class ShowService {
         show.setMovie(movie);
         show.setTheater(theater);
 
-        return showRepository.save(show);
+        showRepository.save(show);
+
+        return "Show updated successfully";
     }
 
     public void deleteShow(Long id){

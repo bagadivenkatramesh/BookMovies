@@ -7,6 +7,7 @@ import com.example.BookMovies.Entity.BookingStatus;
 import com.example.BookMovies.Entity.User;
 import com.example.BookMovies.Service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,11 +23,10 @@ public class BookingController {
     private BookingService bookingService;
 
     @PostMapping("/create_booking")
-    public ResponseEntity<Void> createBooking(
+    public ResponseEntity<String> createBooking(
             @RequestBody BookingDTO bookingDto,
             @AuthenticationPrincipal User user) {
-        bookingService.createBooking(bookingDto, user);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(bookingService.createBooking(bookingDto, user));
     }
 
     @GetMapping("/my_bookings")
@@ -44,12 +44,12 @@ public class BookingController {
     }
 
     @PutMapping("/confirm_booking/{booking_id}")
-    public ResponseEntity<Booking> confirmBooking(@PathVariable Long booking_id){
+    public ResponseEntity<String> confirmBooking(@PathVariable Long booking_id){
         return ResponseEntity.ok(bookingService.confirmBooking(booking_id));
     }
 
     @PutMapping("/cancel_booking/{booking_id}")
-    public ResponseEntity<Booking> cancelBooking(@PathVariable Long booking_id){
+    public ResponseEntity<String> cancelBooking(@PathVariable Long booking_id){
         return ResponseEntity.ok(bookingService.cancelBooking(booking_id));
     }
 

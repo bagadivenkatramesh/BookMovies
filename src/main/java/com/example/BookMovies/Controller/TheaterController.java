@@ -5,6 +5,7 @@ import com.example.BookMovies.DTO.TheaterDTO;
 import com.example.BookMovies.Entity.Theater;
 import com.example.BookMovies.Service.TheaterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,13 +25,13 @@ public class TheaterController {
 
     @PostMapping("/add_theater")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Theater> addTheater(@RequestBody TheaterDTO theaterDto){
-        return ResponseEntity.ok(theaterService.addTheater(theaterDto));
+    public ResponseEntity<String> addTheater(@RequestBody TheaterDTO theaterDto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(theaterService.addTheater(theaterDto));
     }
 
     @PutMapping("/update_theater/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Theater> updateTheater(@PathVariable Long id, @RequestBody TheaterDTO theaterDto){
+    public ResponseEntity<String> updateTheater(@PathVariable Long id, @RequestBody TheaterDTO theaterDto){
         return ResponseEntity.ok(theaterService.updateTheater(id, theaterDto));
     }
 
@@ -38,6 +39,6 @@ public class TheaterController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteTheater(@PathVariable Long id){
         theaterService.deleteTheater(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }
