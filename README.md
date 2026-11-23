@@ -2,8 +2,8 @@
 
 A RESTful backend for a movie ticket booking application, built with **Java and Spring Boot**. It provides APIs for managing movies, theaters, shows, users, and bookings, with JWT-based authentication and role-based authorization.
 
-**Live Application:** [https://bookmovies-web.vercel.app](https://bookmovies-web.vercel.app)
-**Frontend Repository:** [BookMovies-Frontend](https://github.com/bagadivenkatramesh/BookMovies-Frontend)
+**Live Application:** [https://bookmovies-web.vercel.app](https://bookmovies-web.vercel.app)  
+**Frontend Repository:** [BookMovies-Frontend](https://github.com/bagadivenkatramesh/BookMovies-Frontend)  
 **Backend Repository:** [BookMovies](https://github.com/bagadivenkatramesh/BookMovies)
 
 ## Tech Stack
@@ -99,17 +99,101 @@ The application uses **Spring Security with JWT-based authentication**.
 - Passwords are stored using BCrypt hashing.
 - The application uses stateless session management.
 
-## Key API Endpoints
+## API Documentation
 
-The following are confirmed authentication endpoints:
+All endpoints are prefixed with `/api`.
 
-| Method | Endpoint                         | Description                                             | Access        |
-| ------ | -------------------------------- | ------------------------------------------------------- | ------------- |
-| POST   | `/api/auth/register_normal_user` | Register a regular user                                 | Public        |
-| POST   | `/api/auth/login`                | Authenticate and obtain a JWT                           | Public        |
-| GET    | `/api/auth/me`                   | Retrieve the currently authenticated user's information | Authenticated |
+Request and response body types are represented by their corresponding DTO classes. Endpoints returning strings provide success messages, while delete endpoints return no response body.
 
-Additional APIs cover movie, theater, show, and booking operations. Administrative operations are protected under `/api/admin/**`.
+### Authentication
+
+| Method | Endpoint | Request Body | Response | Status | Access |
+|---|---|---|---|---|---|
+| POST | `/api/auth/register_normal_user` | `RegisterUserDTO` | `String` (success message) | 201 Created | Public |
+| POST | `/api/auth/login` | `LoginUserDTO` | `LoginResponseDTO` | 200 OK | Public |
+| GET | `/api/auth/me` | — | `UserResponseDTO` | 200 OK | Authenticated |
+
+### Admin
+
+All endpoints under `/api/admin/**` require `ROLE_ADMIN`.
+
+| Method | Endpoint | Request Body | Response | Status | Access |
+|---|---|---|---|---|---|
+| POST | `/api/admin/register_admin_user` | `RegisterUserDTO` | `String` (success message) | 201 Created | ADMIN |
+
+### Movies
+
+| Method | Endpoint | Request Body / Parameters | Response | Status | Access |
+|---|---|---|---|---|---|
+| POST | `/api/movie/add_movie` | `MovieDTO` | `String` (success message) | 201 Created | ADMIN |
+| GET | `/api/movie/get_all_movies` | — | `List<MovieResponseDTO>` | 200 OK | Authenticated |
+| GET | `/api/movie/get_movies_by_genre` | `genre` (query parameter) | `List<MovieResponseDTO>` | 200 OK | Authenticated |
+| GET | `/api/movie/get_movies_by_language` | `language` (query parameter) | `List<MovieResponseDTO>` | 200 OK | Authenticated |
+| GET | `/api/movie/get_movie_by_title` | `title` (query parameter) | `MovieResponseDTO` | 200 OK | Authenticated |
+| GET | `/api/movie/get_movie_by_id/{id}` | `id` (path variable) | `MovieResponseDTO` | 200 OK | Authenticated |
+| PUT | `/api/movie/update_movie/{id}` | `id` (path variable), `MovieDTO` | `String` (success message) | 200 OK | ADMIN |
+| DELETE | `/api/movie/delete_movie/{id}` | `id` (path variable) | No response body | 204 No Content | ADMIN |
+
+### Theaters
+
+| Method | Endpoint | Request Body / Parameters | Response | Status | Access |
+|---|---|---|---|---|---|
+| GET | `/api/theater/get_theaters_by_location` | `location` (query parameter) | `List<TheaterDTO>` | 200 OK | Authenticated |
+| POST | `/api/theater/add_theater` | `TheaterDTO` | `String` (success message) | 201 Created | ADMIN |
+| PUT | `/api/theater/update_theater/{id}` | `id` (path variable), `TheaterDTO` | `String` (success message) | 200 OK | ADMIN |
+| DELETE | `/api/theater/delete_theater/{id}` | `id` (path variable) | No response body | 204 No Content | ADMIN |
+
+### Shows
+
+| Method | Endpoint | Request Body / Parameters | Response | Status | Access |
+|---|---|---|---|---|---|
+| POST | `/api/show/create_show` | `ShowDTO` | `ShowResponseDTO` | 201 Created | ADMIN |
+| PUT | `/api/show/update_show/{id}` | `id` (path variable), `ShowDTO` | `String` (success message) | 200 OK | ADMIN |
+| DELETE | `/api/show/delete_show/{id}` | `id` (path variable) | No response body | 204 No Content | ADMIN |
+| GET | `/api/show/get_all_shows` | — | `List<ShowResponseDTO>` | 200 OK | Authenticated |
+| GET | `/api/show/get_shows_by_movie/{movieId}` | `movieId` (path variable) | `List<ShowDetailsDTO>` | 200 OK | Authenticated |
+| GET | `/api/show/get_shows_by_theater/{theaterId}` | `theaterId` (path variable) | `List<ShowDetailsDTO>` | 200 OK | Authenticated |
+
+### Bookings
+
+| Method | Endpoint | Request Body / Parameters | Response | Status | Access |
+|---|---|---|---|---|---|
+| POST | `/api/booking/create_booking` | `BookingDTO` | `String` (success message) | 201 Created | Authenticated |
+| GET | `/api/booking/my_bookings` | — | `List<BookingResponseDTO>` | 200 OK | Authenticated |
+| GET | `/api/booking/get_bookings_for_show/{show_id}` | `show_id` (path variable) | `List<BookingResponseDTO>` | 200 OK | Authenticated |
+| PUT | `/api/booking/confirm_booking/{booking_id}` | `booking_id` (path variable) | `String` (success message) | 200 OK | Authenticated |
+| PUT | `/api/booking/cancel_booking/{booking_id}` | `booking_id` (path variable) | `String` (success message) | 200 OK | Authenticated |
+| GET | `/api/booking/get_bookings_by_status/{booking_status}` | `booking_status` (path variable) | `List<BookingResponseDTO>` | 200 OK | ADMIN |
+
+Supported booking statuses:
+
+- `PENDING`
+- `CONFIRMED`
+- `CANCELLED`
+
+### Authentication and Authorization Details
+
+- Login and normal user registration endpoints are publicly accessible.
+- All other endpoints require authentication.
+- Administrative operations require the `ROLE_ADMIN` authority.
+- JWT must be included in the `Authorization` header when accessing protected endpoints:
+
+```http
+Authorization: Bearer <your-jwt-token>
+```
+
+### HTTP Response Status Codes
+
+| Status Code | Description |
+|---|---|
+| `200 OK` | Request completed successfully. |
+| `201 Created` | Resource created successfully. |
+| `204 No Content` | Request completed successfully without a response body. |
+| `400 Bad Request` | Invalid request data or validation failure. |
+| `401 Unauthorized` | Authentication is missing or invalid. |
+| `403 Forbidden` | Authenticated user does not have the required authority. |
+| `404 Not Found` | Requested resource does not exist. |
+| `409 Conflict` | Request conflicts with existing application data. |
 
 ## Local Setup Using Docker
 
