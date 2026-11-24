@@ -5,6 +5,24 @@ A RESTful backend for a movie ticket booking application, built with **Java and 
 **Live Application:** [https://bookmovies-web.vercel.app](https://bookmovies-web.vercel.app)  
 **Frontend Repository:** [BookMovies-Frontend](https://github.com/bagadivenkatramesh/BookMovies-Frontend)
 
+## Table of Contents
+
+- [Tech Stack](#tech-stack)
+- [Features](#features)
+- [Application Architecture](#application-architecture)
+- [Database Domain Model](#database-domain-model)
+- [Authentication and Authorization](#authentication-and-authorization)
+- [API Documentation](#api-documentation)
+    - [Authentication](#authentication)
+    - [Admin](#admin)
+    - [Movies](#movies)
+    - [Theaters](#theaters)
+    - [Shows](#shows)
+    - [Bookings](#bookings)
+- [Environment Configuration](#environment-configuration)
+- [Deployment](#deployment)
+- [Related Repository](#related-repository)
+
 ## Tech Stack
 
 | Technology              | Purpose                                |
@@ -40,21 +58,27 @@ A RESTful backend for a movie ticket booking application, built with **Java and 
 The backend follows a layered architecture:
 
 ```text
-Client (React Frontend)
-        |
-        v
-   REST Controllers
-        |
-        v
-     Services
-        |
-        v
-   Repositories
-        |
-        v
-   MySQL Database
+          Client (React Frontend)
+                    |
+                    v
+          Spring Security Filter Chain
+                    |
+             JWT Authentication
+                    |
+                    v
+             REST Controllers
+                    |
+                    v
+                Services
+                    |
+                    v
+              Repositories
+                    |
+                    v
+              MySQL Database
 ```
 
+- **Spring Security Filter Chain:** Intercepts incoming HTTP requests, validates JWTs, and enforces authentication and authorization rules before requests reach the controllers.
 - **Controllers:** Handle incoming HTTP requests and return API responses.
 - **Services:** Contain application and business logic.
 - **Repositories:** Handle database operations using Spring Data JPA.
@@ -180,96 +204,6 @@ Supported booking statuses:
 ```http
 Authorization: Bearer <your-jwt-token>
 ```
-
-### HTTP Response Status Codes
-
-| Status Code | Description |
-|---|---|
-| `200 OK` | Request completed successfully. |
-| `201 Created` | Resource created successfully. |
-| `204 No Content` | Request completed successfully without a response body. |
-| `400 Bad Request` | Invalid request data or validation failure. |
-| `401 Unauthorized` | Authentication is missing or invalid. |
-| `403 Forbidden` | Authenticated user does not have the required authority. |
-| `404 Not Found` | Requested resource does not exist. |
-| `409 Conflict` | Request conflicts with existing application data. |
-
-## Local Setup Using Docker
-
-Docker Compose starts the MySQL database and Spring Boot backend together.
-
-### Prerequisites
-
-- Git
-- Docker Desktop
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/bagadivenkatramesh/BookMovies.git
-cd BookMovies
-```
-
-### 2. Configure environment variables
-
-Create two files in the project root.
-
-**`.env.compose`**
-
-```dotenv
-MYSQL_ROOT_PASSWORD=your_mysql_root_password
-MYSQL_DATABASE=bookmovies
-```
-
-**`.env.backend`**
-
-```dotenv
-DB_USERNAME=root
-DB_PASSWORD=your_mysql_root_password
-JWT_SECRET=your_secure_jwt_secret
-JWT_EXPIRATION=3600000
-```
-
-Use a secure JWT secret appropriate for your environment. Do not commit either environment file to Git.
-
-### 3. Start the application
-
-```bash
-docker compose up -d --build
-```
-
-This starts:
-
-- MySQL on `localhost:3307`
-- Spring Boot backend on `localhost:8080`
-
-The backend connects to MySQL internally through the Docker Compose service name.
-
-### 4. Verify the containers
-
-```bash
-docker compose ps
-```
-
-To view backend logs:
-
-```bash
-docker compose logs -f backend
-```
-
-The backend APIs are accessible at:
-
-```text
-http://localhost:8080
-```
-
-### 5. Stop the application
-
-```bash
-docker compose down
-```
-
-The named MySQL volume preserves database data between restarts. Avoid `docker compose down -v` unless you intentionally want to delete that volume and its data.
 
 ## Environment Configuration
 
