@@ -3,7 +3,8 @@
 A RESTful backend for a movie ticket booking application, built with **Java and Spring Boot**. It provides APIs for managing movies, theaters, shows, users, and bookings, with JWT-based authentication and role-based authorization.
 
 **Live Application:** [https://bookmovies-web.vercel.app](https://bookmovies-web.vercel.app)  
-**Frontend Repository:** [BookMovies-Frontend](https://github.com/bagadivenkatramesh/BookMovies-Frontend)
+**Frontend Repository:** [BookMovies-Frontend](https://github.com/bagadivenkatramesh/BookMovies-Frontend)  
+**Project Live Demo(YouTube):** [BookMovies Live Demo](https://youtu.be/Gm-HBoLnj6s)
 
 ## Table of Contents
 
@@ -231,7 +232,8 @@ The application is deployed using the following setup:
 
 The backend is packaged as a Docker image and deployed on Railway. Database credentials and JWT configuration are supplied through Railway environment variables rather than committed to the repository.
 
-**Live frontend:** [https://bookmovies-web.vercel.app](https://bookmovies-web.vercel.app)
+**Live frontend:** [https://bookmovies-web.vercel.app](https://bookmovies-web.vercel.app)  
+**Project Live Demo(YouTube):** [BookMovies Live Demo](https://youtu.be/Gm-HBoLnj6s)
 
 ## Related Repository
 
